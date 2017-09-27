@@ -38,9 +38,9 @@ class WorkerControlCommand extends BaseCommand
         $defaultCommand = null,
         $defaultQty = 1
     ) {
-        parent::__construct($name);
         $this->defaultCommand = $defaultCommand;
         $this->defaultQty = $defaultQty;
+        parent::__construct($name);
     }
 
     protected function configure()
