@@ -5,7 +5,7 @@
 $bootstrapPaths = [
     __DIR__ . '/vendor/autoload.php', # Standalone
     __DIR__ . '/../../src/bootstrap.php', # vendor/bin
-    __DIR__ . '/../autoload.php', # __DIR__ = <app>/vendors/nayjest/symfony-worker-control
+    __DIR__ . '/../autoload.php', # vendor/bin
 
 ];
 foreach($bootstrapPaths as $path) {
