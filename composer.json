@@ -1,0 +1,24 @@
+{
+    "name": "nayjest/symfony-worker-control",
+    "description": "Console command for maintaining worker processes",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "v.stepanenko",
+            "email": "mail@vitaliy.in"
+        }
+    ],
+    "require": {
+        "symfony/console": "^3"
+    },
+    "bin": ["workers"],
+    "autoload": {
+        "psr-4": {
+            "Nayjest\\WorkerControl\\" : "src"
+        }
+    },
+    "scripts": {
+        "cs": "phpcs src --standard=psr2"
+    }
+}

@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+# Inside vendors/nayjest/symfony-worker-control
+$bootstrapPaths = [
+    __DIR__ . '/vendor/autoload.php', # Standalone
+    __DIR__ . '/../../src/bootstrap.php', # vendor/bin
+    __DIR__ . '/../autoload.php', # __DIR__ = <app>/vendors/nayjest/symfony-worker-control
+
+];
+foreach($bootstrapPaths as $path) {
+    if (file_exists($path)) {
+        include_once $path;
+        break;
+    }
+    throw new RuntimeException("PHP auto-loader not found. Run 'composer install'");
+}
+$app = new \Symfony\Component\Console\Application();
+$command = new \Nayjest\WorkerControl\WorkerControlCommand('workers', getenv('DEFAULT_WORKER_COMMAND'), getenv('DEFAULT_WORKER_QTY'));
+$app->add($command);
+$app->setDefaultCommand($command->getName(), true);
+$app->run();
