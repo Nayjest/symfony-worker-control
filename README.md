@@ -11,7 +11,7 @@ Console command for maintaining worker processes
 
 **Installation as standalone script:**
 
-`git clone git@github.com:Nayjest/symfony-worker-control.git && cd symfony-worker-control && composer install && chmod +x workers`
+`git clone https://github.com/Nayjest/symfony-worker-control.git && cd symfony-worker-control && composer install && chmod +x workers`
 
 ## Testing
 
