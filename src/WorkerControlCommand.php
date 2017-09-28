@@ -86,11 +86,6 @@ class WorkerControlCommand extends BaseCommand
             );
     }
 
-    public function getDescription()
-    {
-        return 'ololo';
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $time = @date('Y-m-d H:i:s');
@@ -129,9 +124,12 @@ class WorkerControlCommand extends BaseCommand
 
             case self::ACTION_MAINTAIN:
                 $needed = $qty - $alive;
+                if ($needed < 0) {
+                    $needed = 0;
+                }
                 $output->writeln(
                     "$time Maintaining $qty workers: "
-                    . "<fg=green>$alive</> alive, <fg=cyan>$needed to start</>, command: $cmd"
+                    . "<fg=green>$alive alive</>, <fg=cyan>$needed to start</>, command: $cmd"
                 );
                 $this->start($needed, $input, $output);
                 break;
@@ -153,7 +151,7 @@ class WorkerControlCommand extends BaseCommand
 
             case self::ACTION_RESTART:
                 $output->writeln(
-                    "$time Restarting workers: stop <fg=red>$alive</>, start <fg=cyan>$qty</>, command: $cmd"
+                    "$time Restarting workers: <fg=red>stop $alive</>, <fg=cyan>start $qty</>, command: $cmd"
                 );
                 $this->service->stop($cmd);
                 $this->start($qty, $input, $output);
