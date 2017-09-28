@@ -6,6 +6,7 @@ Console command for maintaining worker processes
 ## Installation
 
 **Installation as lib to existing project:**
+
 `composer require nayjest/symfony-worker-control`
 
 **Installation as standalone script:**
