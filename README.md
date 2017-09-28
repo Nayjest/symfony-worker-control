@@ -26,7 +26,7 @@ Console command for maintaining worker processes
 Code-style (PSR2):
 `composer cs`
 
-Wroker for tests: `tests/example-worker.php`
+Worker for tests: [tests/example-worker.php](https://github.com/Nayjest/symfony-worker-control/blob/master/tests/example-worker.php)
  
  
 ## Usage
@@ -35,7 +35,6 @@ Wroker for tests: `tests/example-worker.php`
 Command may be executed directly (`./workers ...`) or as argument of php command (`php workers ...`).
 
 See `./workers --help` for help.
-
 
 ### Actions
 
@@ -64,10 +63,10 @@ if DEFAULT_WORKER_QTY isn't defined, qty = 1
 
 **--quiet -q**  Do not output any message
 
-Help:
+**Help:**
 `./workers --help`
 
-Examples:
+**Examples:**
 
 `./workers start   --qty=2 "php my_process.php"`
 
