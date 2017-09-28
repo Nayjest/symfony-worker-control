@@ -16,14 +16,17 @@ class WorkerControlCommand extends BaseCommand
     const ACTION_RESTART = 'restart';
     const ACTION_STOP = 'stop';
     const ACTION_MAINTAIN = 'maintain';
-    /**
-     * @var string|null
-     */
+    const ACTION_COUNT = 'count';
+    const ACTION_LIST = 'list';
+
+    /** @var string|null */
     protected $defaultCommand;
-    /**
-     * @var int
-     */
+
+    /** @var int */
     protected $defaultQty;
+
+    /** @var Service */
+    protected $service;
 
     /**
      * WorkerControlCommand constructor.
@@ -40,6 +43,7 @@ class WorkerControlCommand extends BaseCommand
     ) {
         $this->defaultCommand = $defaultCommand;
         $this->defaultQty = $defaultQty;
+        $this->service = new Service();
         parent::__construct($name);
     }
 
@@ -50,14 +54,14 @@ class WorkerControlCommand extends BaseCommand
             ->addArgument(
                 "action",
                 $this->defaultCommand ? InputArgument::OPTIONAL : InputArgument::REQUIRED,
-                'start|stop|restart|maintain',
+                'start|stop|restart|maintain|count',
                 $this->defaultCommand ? 'maintain' : null
             )
             ->addArgument(
                 'cmd',
                 $this->defaultCommand ? InputArgument::OPTIONAL : InputArgument::REQUIRED,
                 'Worker command',
-                $this->defaultCommand
+                $this->defaultCommand ?: null
             )
             ->addOption(
                 'qty',
@@ -65,13 +69,34 @@ class WorkerControlCommand extends BaseCommand
                 InputOption::VALUE_REQUIRED,
                 'Qty of workers to start/restart/maintain',
                 $this->defaultQty
+            )
+            ->addOption(
+                'output',
+                'o',
+                InputOption::VALUE_REQUIRED,
+                'Output for workers',
+                '/dev/null'
+            )
+            ->addOption(
+                'errors',
+                'e',
+                InputOption::VALUE_REQUIRED,
+                'Error output for workers (--output value is used by default)',
+                null
             );
+    }
+
+    public function getDescription()
+    {
+        return 'ololo';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $time = @date('Y-m-d H:i:s');
+        $time = "[<fg=yellow>$time]</>";
         $action = $input->getArgument('action');
+
         $cmd = $input->getArgument('cmd');
 
         $qty = $input->getOption('qty');
@@ -79,49 +104,87 @@ class WorkerControlCommand extends BaseCommand
             throw new InvalidArgumentException("qty must be > 0");
         }
 
-        $service = new Service();
-        if ($service->isWindows) {
+        if ($this->service->isWindows) {
             $alive = '<unknown qty>';
             if ($action !== self::ACTION_START) {
                 throw new RuntimeException("Only 'start' command is supported in Windows");
             }
         } else {
-            $alive = $service->getQtyAlive($cmd);
+            $alive = $this->service->getQtyAlive($cmd, [$this->getName()]);
         }
 
         switch ($action) {
+            case self::ACTION_COUNT:
+                echo "$alive\n";
+                return;
+
+            case self::ACTION_LIST:
+                $output->write(
+                    $this->service->getList(
+                        $cmd,
+                        [$this->getName()]
+                    )
+                );
+                return;
+
             case self::ACTION_MAINTAIN:
                 $needed = $qty - $alive;
                 $output->writeln(
-                    "[$time] Maintaining $qty workers: $alive alive, $needed to start, command: $cmd"
+                    "$time Maintaining $qty workers: "
+                    . "<fg=green>$alive</> alive, <fg=cyan>$needed to start</>, command: $cmd"
                 );
-                $service->start($cmd, $needed);
+                $this->start($needed, $input, $output);
                 break;
 
             case self::ACTION_STOP:
                 $output->writeln(
-                    "[$time] Stop workers: $alive alive,  command: $cmd"
+                    "$time <fg=red>Stop $alive workers</>: $cmd"
                 );
-                $service->stop($cmd);
+                $this->service->stop($cmd);
                 break;
 
             case self::ACTION_START:
+                $aliveMsg = $alive ? " in addition to <fg=green>$alive alive</>" : "";
                 $output->writeln(
-                    "[$time] Start $qty workers:  $alive alive, $qty to start, command: $cmd"
+                    "$time <fg=cyan>Starting $qty</> workers{$aliveMsg}, command: $cmd"
                 );
-                $service->start($cmd, $qty);
+                $this->start($qty, $input, $output);
                 break;
 
             case self::ACTION_RESTART:
                 $output->writeln(
-                    "[$time] Restart processes: stop $alive, start $qty, command: $cmd"
+                    "$time Restarting workers: stop <fg=red>$alive</>, start <fg=cyan>$qty</>, command: $cmd"
                 );
-                $service->stop($cmd);
-                $service->start($cmd, $qty);
+                $this->service->stop($cmd);
+                $this->start($qty, $input, $output);
                 break;
 
             default:
                 throw new InvalidArgumentException("Invalid action: '$action'");
+        }
+        $output->writeln(
+            "$time Done."
+        );
+    }
+
+    protected function start($qty, InputInterface $input, OutputInterface $output)
+    {
+        $outputFile = $input->getOption('output');
+        $errorsOutputFile = $input->getOption('errors');
+        if (!$errorsOutputFile) {
+            $errorsOutputFile = $outputFile;
+        }
+
+        $executed = $this->service->start(
+            $input->getArgument('cmd'),
+            $qty,
+            $outputFile,
+            $errorsOutputFile
+        );
+        foreach ($executed as $command) {
+            $output->writeln(
+                "- Executed: <fg=cyan>$command</>"
+            );
         }
     }
 }

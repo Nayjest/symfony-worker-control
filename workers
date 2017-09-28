@@ -4,6 +4,9 @@
 use Nayjest\WorkerControl\WorkerControlCommand;
 use Symfony\Component\Console\Application;
 
+$errorLevel=error_reporting();
+error_reporting($errorLevel & ~E_NOTICE & ~E_WARNING);
+
 $bootstrapPaths = [
     __DIR__ . '/vendor/autoload.php', # Standalone
     __DIR__ . '/../../../src/bootstrap.php', # Lib
@@ -27,7 +30,7 @@ $app = new Application();
 $command = new WorkerControlCommand(
     'workers',
     getenv('DEFAULT_WORKER_COMMAND'),
-    getenv('DEFAULT_WORKER_QTY')
+    getenv('DEFAULT_WORKER_QTY')?:1
 );
 $app->add($command);
 $app->setDefaultCommand($command->getName(), true);
