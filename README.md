@@ -23,10 +23,19 @@ Console command for maintaining worker processes
 
 ## Testing
 
-Code-style (PSR2):
+**Code-style (PSR2):**
+
+1) Install code sniffer: 
+
+```composer global require "squizlabs/php_codesniffer=*"```
+
+2) Run code-style tests from symfony-worker-control folder
+
 `composer cs`
 
-Worker for tests: [tests/example-worker.php](https://github.com/Nayjest/symfony-worker-control/blob/master/tests/example-worker.php)
+**Worker for tests:**
+
+[tests/example-worker.php](https://github.com/Nayjest/symfony-worker-control/blob/master/tests/example-worker.php)
  
  
 ## Usage
