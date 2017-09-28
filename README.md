@@ -3,6 +3,13 @@ symfony-worker-control
 
 Console command for maintaining worker processes
 
+## Dependencies
+
+- php5+ | php7+ | hhvm
+- symfony/console 3+ package
+- pgrep & pkill  command-line utilities
+
+
 ## Installation
 
 **Installation as lib to existing project:**
@@ -13,6 +20,7 @@ Console command for maintaining worker processes
 
 `git clone https://github.com/Nayjest/symfony-worker-control.git && cd symfony-worker-control && composer install && chmod +x workers`
 
+
 ## Testing
 
 Code-style (PSR2):
@@ -20,12 +28,14 @@ Code-style (PSR2):
 
 Wroker for tests: `tests/example-worker.php`
  
+ 
 ## Usage
 `workers [--qty QTY] [-o|--output OUTPUT] [-e|--errors ERRORS] [--] <action> <cmd>`
 
 Command may be executed directly (`./workers ...`) or as argument of php command (`php workers ...`).
 
 See `./workers --help` for help.
+
 
 ### Actions
 
@@ -40,6 +50,7 @@ See `./workers --help` for help.
 **count** -- print count of running processes
 
 **list** -- print information about running processes
+
 
 ### Options
 
@@ -66,9 +77,11 @@ Examples:
 
 `php workers stop "php my_process.php"`
 
+
 ## Security
 
 If you discover any security related issues, please email mail@vitaliy.in instead of using the issue tracker.
+
 
 ## License
 
