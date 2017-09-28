@@ -60,7 +60,7 @@ Examples:
 
 `./workers start   --qty=2 "php my_process.php"`
 
-`./workers restart --qty=3 "php my_process.php"`
+`./workers restart --qty=3 "my_process.php"`
 
 `php workers maintain --qty=4 "php my_process.php"`
 
