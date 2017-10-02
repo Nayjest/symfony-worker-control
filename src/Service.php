@@ -102,7 +102,7 @@ class Service
     public function getList($cmd, array $except = [])
     {
         $cmd = $this->prepare($cmd);
-        $output = `pgrep -l -f "$cmd"`;
+        $output = `pgrep -a -f "$cmd"`;
         return $this->filterList($output, array_merge($except, ['pgrep']));
     }
 
