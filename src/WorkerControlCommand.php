@@ -31,16 +31,14 @@ class WorkerControlCommand extends BaseCommand
     /**
      * WorkerControlCommand constructor.
      *
-     * @param string $name                command name
+     * @param string $name command name
      * @param string|null $defaultCommand default command to execute;
      *                                    "cmd" argument will be required if $defaultCommand is null
      * @param int $defaultQty
      */
-    public function __construct(
-        $name = 'workers',
-        $defaultCommand = null,
-        $defaultQty = 1
-    ) {
+    public function __construct($name = 'workers', $defaultCommand = null, $defaultQty = 1)
+    {
+
         $this->defaultCommand = $defaultCommand;
         $this->defaultQty = $defaultQty;
         $this->service = new Service();
@@ -110,7 +108,7 @@ class WorkerControlCommand extends BaseCommand
 
         switch ($action) {
             case self::ACTION_COUNT:
-                echo "$alive\n";
+                $output->write("Current workers count: $alive\n");
                 return;
 
             case self::ACTION_LIST:

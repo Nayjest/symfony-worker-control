@@ -1,2 +1,5 @@
 /vendor/
 composer.lock
+phpunit.phar
+build
+.idea/*

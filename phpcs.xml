@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="nayjest/symfony-worker-control">
+    <description>The coding standard for nayjest/symfony-worker-control package</description>
+    <file>./src</file>
+    <rule ref="PSR2"/>
+</ruleset>
