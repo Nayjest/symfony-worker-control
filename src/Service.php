@@ -19,13 +19,15 @@ class Service
 
     public function __construct($phpInterpreter = 'php')
     {
-        $this->isWindows = (substr(php_uname(), 0, 7) === "Windows");
+        $this->isWindows = (substr(php_uname(), 0, 7) === 'Windows');
         $this->phpInterpreter = $phpInterpreter;
     }
 
     /**
-     * @param $cmd
-     * @param $qty
+     * Starts worker processes.
+     *
+     * @param string $cmd
+     * @param int $qty
      * @param string|null $log
      * @param string| null $errLog
      * @return array
@@ -37,9 +39,9 @@ class Service
         $executed = [];
         for ($i = 1; $i <= $qty; $i++) {
             if ($this->isWindows) {
-                pclose(popen("start " . $cmd, "r"));
+                pclose(popen("start $cmd", 'r'));
             } else {
-                $final_cmd = str_replace('{i}', $i, $cmd) . " &";
+                $final_cmd = str_replace('{i}', $i, $cmd) . ' &';
                 exec($final_cmd);
                 $executed[] = $final_cmd;
             }
@@ -47,6 +49,14 @@ class Service
         return $executed;
     }
 
+    /**
+     * Returns command with output redirection.
+     *
+     * @param string $cmd
+     * @param string|null $output
+     * @param string|null $errorsOutput
+     * @return string
+     */
     public function redirectOutput($cmd, $output = null, $errorsOutput = null)
     {
         if ($errorsOutput && $output && $errorsOutput === $output) {
@@ -62,6 +72,8 @@ class Service
     }
 
     /**
+     * Kills all worker processes.
+     *
      * @param string $cmd
      */
     public function stop($cmd)
@@ -74,6 +86,8 @@ class Service
     }
 
     /**
+     * Returns quantity of alive worker processes.
+     *
      * @param string $cmd
      * @return int
      */
@@ -95,6 +109,8 @@ class Service
     }
 
     /**
+     * Returns list of alive worker processes.
+     *
      * @param string $cmd
      * @param array $except
      * @return string

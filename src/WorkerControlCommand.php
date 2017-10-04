@@ -52,7 +52,7 @@ class WorkerControlCommand extends BaseCommand
 
         $this
             ->addArgument(
-                "action",
+                'action',
                 $this->defaultCommand ? InputArgument::OPTIONAL : InputArgument::REQUIRED,
                 'start|stop|restart|maintain|count',
                 $this->defaultCommand ? 'maintain' : null
