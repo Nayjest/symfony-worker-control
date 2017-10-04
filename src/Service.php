@@ -11,16 +11,20 @@ use RuntimeException;
  */
 class Service
 {
+    /** @var bool */
     public $isWindows;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $phpInterpreter;
 
-    public function __construct($phpInterpreter = 'php')
+    /** @var string|null */
+    private $workingDir;
+
+    public function __construct($workingDir = null, $phpInterpreter = 'php')
     {
         $this->isWindows = (substr(php_uname(), 0, 7) === 'Windows');
         $this->phpInterpreter = $phpInterpreter;
+        $this->workingDir = $workingDir;
     }
 
     /**
@@ -34,6 +38,10 @@ class Service
      */
     public function start($cmd, $qty, $log = null, $errLog = null)
     {
+        if ($this->workingDir) {
+            $currentDir = getcwd();
+            chdir($this->workingDir);
+        }
         $cmd = $this->prepare($cmd);
         $cmd = $this->redirectOutput($cmd, $log, $errLog);
         $executed = [];
@@ -45,6 +53,9 @@ class Service
                 exec($final_cmd);
                 $executed[] = $final_cmd;
             }
+        }
+        if ($this->workingDir) {
+            chdir($currentDir);
         }
         return $executed;
     }

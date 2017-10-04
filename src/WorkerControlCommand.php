@@ -31,25 +31,24 @@ class WorkerControlCommand extends BaseCommand
     /**
      * WorkerControlCommand constructor.
      *
-     * @param string $name                command name
      * @param string|null $defaultCommand default command to execute;
      *                                    "cmd" argument will be required if $defaultCommand is null
      * @param int $defaultQty
+     * @param string|null $workingDir
      */
     public function __construct(
-        $name = 'workers',
         $defaultCommand = null,
-        $defaultQty = 1
+        $defaultQty = 1,
+        $workingDir = null
     ) {
         $this->defaultCommand = $defaultCommand;
         $this->defaultQty = $defaultQty;
-        $this->service = new Service();
-        parent::__construct($name);
+        $this->service = new Service($workingDir);
+        parent::__construct('workers');
     }
 
     protected function configure()
     {
-
         $this
             ->addArgument(
                 'action',
