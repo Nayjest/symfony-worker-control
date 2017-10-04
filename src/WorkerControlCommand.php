@@ -75,7 +75,7 @@ class WorkerControlCommand extends BaseCommand
                 'o',
                 InputOption::VALUE_REQUIRED,
                 'Output for workers',
-                '/dev/null'
+                $this->service->isWindows ? 'NUL' : '/dev/null'
             )
             ->addOption(
                 'errors',
