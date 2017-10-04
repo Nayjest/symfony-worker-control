@@ -1,7 +1,9 @@
 symfony-worker-control
 ===
 
-Console command for maintaining worker processes
+Console command for maintaining worker processes.
+
+May be used as stand-alone script or included as lib to existing project.
 
 ## Dependencies
 
