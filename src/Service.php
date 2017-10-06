@@ -22,6 +22,7 @@ class Service
 
     public function __construct($workingDir = null, $phpInterpreter = 'php')
     {
+
         $this->isWindows = (substr(php_uname(), 0, 7) === 'Windows');
         $this->phpInterpreter = $phpInterpreter;
         $this->workingDir = $workingDir;
@@ -129,7 +130,8 @@ class Service
     public function getList($cmd, array $except = [])
     {
         $cmd = $this->prepare($cmd);
-        $output = `pgrep -a -f "$cmd"`;
+        $option = $this->isPrgepASupported() ? 'a':'l';
+        $output = `pgrep -$option -f "$cmd"`;
         return $this->filterList($output, array_merge($except, ['pgrep']));
     }
 
@@ -156,5 +158,14 @@ class Service
             return "$this->phpInterpreter $cmd";
         }
         return $cmd;
+    }
+
+    protected function isPrgepASupported()
+    {
+        static $result;
+        if ($result === null) {
+            $result = strpos(`pgrep -a`, 'invalid option') === false;
+        }
+        return $result;
     }
 }
