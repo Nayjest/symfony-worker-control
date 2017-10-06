@@ -164,7 +164,7 @@ class Service
     {
         static $result;
         if ($result === null) {
-            $result = strpos(`pgrep -a`, 'invalid option') === false;
+            $result = strpos(`pgrep -a 2>&1`, 'invalid option') === false;
         }
         return $result;
     }
