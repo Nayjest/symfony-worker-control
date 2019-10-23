@@ -1,4 +1,4 @@
-Symfony Worker Control
+PHP Worker Control
 ===
 
 Console command for maintaining worker processes.
