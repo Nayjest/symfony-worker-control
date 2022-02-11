@@ -110,7 +110,7 @@ class WorkerControlCommand extends BaseCommand
         switch ($action) {
             case self::ACTION_COUNT:
                 echo "$alive\n";
-                return;
+                return 0;
 
             case self::ACTION_LIST:
                 $output->write(
@@ -119,7 +119,7 @@ class WorkerControlCommand extends BaseCommand
                         [$this->getName()]
                     )
                 );
-                return;
+                return 0;
 
             case self::ACTION_MAINTAIN:
                 $needed = $qty - $alive;
@@ -162,6 +162,7 @@ class WorkerControlCommand extends BaseCommand
         $output->writeln(
             "$time Done."
         );
+        return 0;
     }
 
     protected function start($qty, InputInterface $input, OutputInterface $output)
